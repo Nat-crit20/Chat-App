@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,11 +8,24 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const HexColors = ["#090C08", " #474056", " #8A95A5", " #B9C6AE"];
+const HexColors = ["#090C08", "#474056", "#8A95A5", "#B9C6AE"];
 
 const Start = ({ navigation }) => {
   const [name, setName] = useState("");
   const [chatColor, setChatColor] = useState(null);
+  const myRefs = React.useRef([]);
+
+  const displayColor = () => {
+    return HexColors.map((color) => {
+      return (
+        <TouchableOpacity
+          style={[styles.chatColor, { backgroundColor: color }]}
+          onPress={() => setChatColor(color)}
+          key={color} // Add a unique key to each TouchableOpacity
+        ></TouchableOpacity>
+      );
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -22,7 +35,7 @@ const Start = ({ navigation }) => {
         resizeMode="cover"
       >
         <Text style={styles.title}>Chat App!</Text>
-        <View>
+        <View style={styles.section}>
           <TextInput
             style={styles.input}
             value={name}
@@ -30,22 +43,15 @@ const Start = ({ navigation }) => {
             placeholder="Your name"
           />
           <Text style={styles.text}>Choose Background Color</Text>
-          {HexColors.forEach((color) => {
-            return (
-              <TouchableOpacity
-                style={[styles.chatColor, { backgroundColor: color }]}
-                onPress={() => setChatColor(color)}
-              ></TouchableOpacity>
-            );
-          })}
+          <View style={styles.colorContainer}>{displayColor()}</View>
 
           <TouchableOpacity
-            styles={styles.button}
+            style={styles.button}
             onPress={() =>
               navigation.navigate("Chat", { name: name, chatColor: chatColor })
             }
           >
-            <Text>Start Chatting</Text>
+            <Text style={styles.button_text}>Start Chatting</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -59,18 +65,32 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-around",
   },
   title: {
     fontSize: 45,
     fontWeight: "600",
     color: "#FFFFFF",
+    textAlign: "center",
   },
+  section: {
+    backgroundColor: "#FFFFFF",
+    height: "44%",
+    justifyContent: "space-around",
+    padding: 8,
+  },
+
   input: {
     fontSize: 16,
     fontWeight: "300",
     color: "#757083",
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingStart: 25,
+    width: "90%",
     opacity: 0.5,
+    borderWidth: 2,
+    alignSelf: "center",
   },
   text: {
     fontSize: 16,
@@ -78,21 +98,27 @@ const styles = StyleSheet.create({
     color: "#757083",
     opacity: 1,
   },
-  chatColor: {
-    // height: 20,
-    // width: 20,
-    // borderRadius: 10,
+  colorContainer: {
+    margin: 0,
+    paddingEnd: 80,
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    padding: 10,
+  },
+  chatColor: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
   },
   button: {
+    backgroundColor: "#757083",
+    alignItems: "center",
+  },
+  button_text: {
+    lineHeight: 50,
     fontSize: 16,
     fontWeight: "600",
-    fontColor: "#FFFFFF",
-    height: 20,
-    width: 20,
-    backgroundColor: "#757083",
-    position: "absolute",
+    color: "#FFFFFF",
   },
 });
 export default Start;
