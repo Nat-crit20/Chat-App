@@ -2,34 +2,41 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Platform } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 
-const Chat = ({ route, navigation }) => {
-  const { name, chatColor } = route.params;
+import {
+  getDocs,
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+} from "firebase/firestore";
+
+const Chat = ({ db, route, navigation }) => {
+  const { name, chatColor, userID } = route.params;
   const [messages, setMessage] = useState([]);
 
   useEffect(() => {
     navigation.setOptions({ title: name });
-    setMessage([
-      {
-        _id: 1,
-        text: "Hello Developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-      {
-        _id: 2,
-        text: "Welcome to the chat",
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
+    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+    const unsubMessageList = onSnapshot(q, (documentSnapshot) => {
+      const newMessages = [];
+      documentSnapshot.forEach((doc) => {
+        newMessages.push({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis()),
+        });
+      });
+      setMessage(newMessages);
+    });
+
+    return () => {
+      if (unsubMessageList) unsubMessageList();
+    };
   }, []);
 
   const onSend = (newMessage) => {
-    setMessage((prevMessage) => GiftedChat.append(prevMessage, newMessage));
+    addDoc(collection(db, "messages"), newMessage[0]);
   };
 
   return (
@@ -38,7 +45,7 @@ const Chat = ({ route, navigation }) => {
         messages={messages}
         onSend={(messages) => onSend(messages)}
         user={{
-          _id: 1,
+          _id: userID,
         }}
       />
       {Platform.OS === "android" ? (

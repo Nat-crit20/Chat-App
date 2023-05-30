@@ -6,14 +6,32 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
+  Alert,
 } from "react-native";
+
+import { getAuth, signInAnonymously } from "firebase/auth";
 
 const HexColors = ["#090C08", "#474056", "#8A95A5", "#B9C6AE"];
 
 const Start = ({ navigation }) => {
   const [name, setName] = useState("");
   const [chatColor, setChatColor] = useState(null);
-  const myRefs = React.useRef([]);
+  const auth = getAuth();
+
+  const signInUser = () => {
+    signInAnonymously(auth)
+      .then((results) => {
+        Alert.alert("Signed in successfully");
+        navigation.navigate("Chat", {
+          name: name,
+          chatColor: chatColor,
+          userID: results.user.uid,
+        });
+      })
+      .catch((error) => {
+        Alert.alert("Unable to sign in, try later again.");
+      });
+  };
 
   const displayColor = () => {
     return HexColors.map((color) => {
@@ -45,12 +63,7 @@ const Start = ({ navigation }) => {
           <Text style={styles.text}>Choose Background Color</Text>
           <View style={styles.colorContainer}>{displayColor()}</View>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() =>
-              navigation.navigate("Chat", { name: name, chatColor: chatColor })
-            }
-          >
+          <TouchableOpacity style={styles.button} onPress={signInUser}>
             <Text style={styles.button_text}>Start Chatting</Text>
           </TouchableOpacity>
         </View>
