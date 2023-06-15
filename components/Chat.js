@@ -16,7 +16,7 @@ import {
 //Import offline storage
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Chat = ({ db, route, navigation, isConnected }) => {
+const Chat = ({ db, route, navigation, isConnected, storage }) => {
   const { name, chatColor, userID } = route.params;
   const [messages, setMessage] = useState([]);
 
@@ -74,7 +74,14 @@ const Chat = ({ db, route, navigation, isConnected }) => {
 
   //
   const renderCustomActions = (props) => {
-    return <CustomActions onSend={onSend} {...props} />;
+    return (
+      <CustomActions
+        onSend={onSend}
+        storage={storage}
+        userID={userID}
+        {...props}
+      />
+    );
   };
 
   const renderCustomView = (props) => {

@@ -12,6 +12,8 @@ import {
   enableNetwork,
 } from "firebase/firestore";
 
+import { getStorage } from "firebase/storage";
+
 import { useEffect } from "react";
 import Start from "./components/Start";
 import Chat from "./components/Chat";
@@ -32,6 +34,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const App = () => {
   const connectionStatus = useNetInfo();
@@ -54,6 +57,7 @@ const App = () => {
             <Chat
               isConnected={connectionStatus.isConnected}
               db={db}
+              storage={storage}
               {...props}
             />
           )}
