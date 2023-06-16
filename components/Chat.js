@@ -4,7 +4,7 @@ import { GiftedChat, InputToolbar } from "react-native-gifted-chat";
 import CustomActions from "./CustomActions";
 import MapView from "react-native-maps";
 
-//import firbase
+//import firebase
 import {
   collection,
   addDoc,
@@ -27,6 +27,8 @@ const Chat = ({ db, route, navigation, isConnected, storage }) => {
       unsubMessageList = null;
 
       navigation.setOptions({ title: name });
+
+      //Get all the messages in a database and update the chat
       const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
       unsubMessageList = onSnapshot(q, (documentSnapshot) => {
         const newMessages = [];
@@ -49,11 +51,13 @@ const Chat = ({ db, route, navigation, isConnected, storage }) => {
     };
   }, [isConnected]);
 
+  //Load if the app is offline from the local storage
   const loadCachedList = async () => {
     const cache = (await AsyncStorage.getItem("messages")) || [];
     setMessage(JSON.parse(cache));
   };
 
+  //Add Messages to local storage
   const cacheMessageList = async (listToCache) => {
     try {
       await AsyncStorage.setItem("messages", JSON.stringify(listToCache));
@@ -72,7 +76,7 @@ const Chat = ({ db, route, navigation, isConnected, storage }) => {
     else return null;
   };
 
-  //
+  //Take a photo, upload an image, and send location
   const renderCustomActions = (props) => {
     return (
       <CustomActions
@@ -84,6 +88,7 @@ const Chat = ({ db, route, navigation, isConnected, storage }) => {
     );
   };
 
+  //Create a map image
   const renderCustomView = (props) => {
     const { currentMessage } = props;
     if (currentMessage.location) {

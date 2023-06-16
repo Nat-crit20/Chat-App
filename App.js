@@ -1,6 +1,3 @@
-//import constants
-import FIREBASECONFIG from "./contants";
-
 // import react Navigation
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -15,6 +12,7 @@ import {
   enableNetwork,
 } from "firebase/firestore";
 
+//Storage for the images
 import { getStorage } from "firebase/storage";
 
 import { useEffect } from "react";
@@ -25,7 +23,7 @@ import { Alert } from "react-native";
 //import network connectivity checker
 import { useNetInfo } from "@react-native-community/netinfo";
 
-// Your web app's Firebase configuration
+//Remove firebaseConfig and add yours
 const firebaseConfig = {
   apiKey: "AIzaSyBjfIKhlG0-GK5k5-f90IxnxBzpoIyqlNg",
   authDomain: "chat-app-3c693.firebaseapp.com",
@@ -41,6 +39,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 const App = () => {
+  //Check if you are connected to the internet
   const connectionStatus = useNetInfo();
 
   useEffect(() => {
