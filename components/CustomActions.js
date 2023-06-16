@@ -89,10 +89,17 @@ const CustomActions = ({
   const takePhoto = async () => {
     let permissions = await ImagePicker.requestCameraPermissionsAsync();
     console.log(permissions);
-    if (permissions?.granted) {
-      let result = await ImagePicker.launchCameraAsync();
-      if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
-      else Alert.alert("Permissions have't been granted");
+    try {
+      if (permissions?.granted) {
+        let result = await ImagePicker.launchCameraAsync();
+        if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
+        else Alert.alert("Permissions have't been granted");
+      } else Alert.alert("Permissions have't been granted");
+    } catch (error) {
+      Alert.alert(
+        "Camera is unable to open because of a common technology error. Try on another device if possible."
+      );
+      console.log(error);
     }
   };
 
