@@ -57,3 +57,7 @@ then run the next commands:
 npx expo install
 npx expo start
 ```
+
+## Known Bugs
+
+Currently `Take a photo` does not work on some Android phones
