@@ -18,12 +18,12 @@ First you need to create a constants.js file and add your firebaseConfig after y
 
 ### Libraries used
 
-Gifted-chat
-React-navigation
-Expo-image-picker
-Expo-location
-React-native-maps
-Async-storage
+- Gifted-chat
+- React-navigation
+- Expo-image-picker
+- Expo-location
+- React-native-maps
+- Async-storage
 
 ## Getting started
 
