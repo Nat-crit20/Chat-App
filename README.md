@@ -1,5 +1,9 @@
 # Chat-App
 
+
+https://github.com/Nat-crit20/Chat-App/assets/93047867/0ba1aacd-e324-4499-b7cd-29e8bcb00c0c
+
+
 ## Overview
 
 The purpose is to learn how to build a chat app for mobile devices using React Native. The app will
